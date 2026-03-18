@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polymarket Copy Trader</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+          <polyline points="16 7 22 7 22 13"></polyline>
+        </svg>
+        <span>Polymarket Copy Trader</span>
+      </div>
+      <div class="status-badge" id="statusBadge">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Stopped</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- CONTROL PANEL -->
+    <section class="card" id="controlPanel">
+      <h2 class="card-title">⚙️ Control Panel</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="targetAddress">Target Wallet Address</label>
+          <input type="text" id="targetAddress" placeholder="0x..." autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="copyMultiplier">Copy Multiplier</label>
+          <input type="number" id="copyMultiplier" value="1.0" min="0.01" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label for="pollInterval">Poll Interval (seconds)</label>
+          <input type="number" id="pollInterval" value="10" min="5" step="1" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="saveConfigBtn" onclick="saveConfig()">💾 Save Config</button>
+        <button class="btn btn-success" id="toggleBotBtn" onclick="toggleBot()">▶ Start Bot</button>
+        <button class="btn btn-danger" id="cancelAllBtn" onclick="cancelAllOrders()">🗑 Cancel All Orders</button>
+      </div>
+    </section>
+
+    <!-- STATUS PANEL -->
+    <section class="card" id="statusPanel">
+      <h2 class="card-title">📊 Bot Status</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Status</span>
+          <span class="stat-value" id="statStatus">—</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Target Address</span>
+          <span class="stat-value mono" id="statTarget">—</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Copy Multiplier</span>
+          <span class="stat-value" id="statMultiplier">—</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Poll Interval</span>
+          <span class="stat-value" id="statInterval">—</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Copied</span>
+          <span class="stat-value accent" id="statTotal">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Last Poll</span>
+          <span class="stat-value" id="statLastPoll">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARGET ORDERS TABLE -->
+    <section class="card">
+      <div class="card-header-row">
+        <h2 class="card-title">🎯 Target Orders</h2>
+        <button class="btn btn-sm" onclick="loadTargetOrders()">↻ Refresh</button>
+      </div>
+      <div class="table-wrapper">
+        <table id="targetOrdersTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Market</th>
+              <th>Side</th>
+              <th>Price</th>
+              <th>Size</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="targetOrdersBody">
+            <tr><td colspan="6" class="empty-row">No data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COPIED ORDERS TABLE -->
+    <section class="card">
+      <div class="card-header-row">
+        <h2 class="card-title">📋 Copied Orders History</h2>
+        <button class="btn btn-sm" onclick="loadCopiedOrders()">↻ Refresh</button>
+      </div>
+      <div class="table-wrapper">
+        <table id="copiedOrdersTable">
+          <thead>
+            <tr>
+              <th>Original ID</th>
+              <th>Copied ID</th>
+              <th>Token</th>
+              <th>Side</th>
+              <th>Price</th>
+              <th>Orig. Size</th>
+              <th>Copied Size</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="copiedOrdersBody">
+            <tr><td colspan="9" class="empty-row">No data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- OWN OPEN ORDERS TABLE -->
+    <section class="card">
+      <div class="card-header-row">
+        <h2 class="card-title">💼 My Open Orders</h2>
+        <button class="btn btn-sm" onclick="loadOwnOrders()">↻ Refresh</button>
+      </div>
+      <div class="table-wrapper">
+        <table id="ownOrdersTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Token</th>
+              <th>Side</th>
+              <th>Price</th>
+              <th>Size</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="ownOrdersBody">
+            <tr><td colspan="6" class="empty-row">No data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
