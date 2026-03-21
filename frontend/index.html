@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polymarket Copy Trader</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>🔁 Polymarket Copy Trader</h1>
+      <div class="status-badge" id="status-badge">
+        <span class="dot" id="status-dot"></span>
+        <span id="status-text">Загрузка…</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Control panel -->
+    <section class="card" id="control-panel">
+      <h2>Управление</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="target-address">Адрес целевого кошелька</label>
+          <input type="text" id="target-address" placeholder="0x…" />
+        </div>
+        <div class="form-group">
+          <label for="multiplier">Множитель размера ордера</label>
+          <input type="number" id="multiplier" min="0.01" step="0.01" value="1.0" />
+        </div>
+        <div class="form-group">
+          <label for="interval">Интервал опроса (сек)</label>
+          <input type="number" id="interval" min="5" step="1" value="10" />
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-save">💾 Сохранить настройки</button>
+        <button class="btn btn-success" id="btn-start">▶ Запустить</button>
+        <button class="btn btn-danger" id="btn-stop">■ Остановить</button>
+        <button class="btn btn-warning" id="btn-cancel">🚫 Отменить все ордера</button>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-copied">0</div>
+        <div class="stat-label">Скопировано ордеров</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-errors">0</div>
+        <div class="stat-label">Ошибок</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-interval">—</div>
+        <div class="stat-label">Интервал опроса</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-multiplier">—</div>
+        <div class="stat-label">Множитель</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-last-poll">—</div>
+        <div class="stat-label">Последний опрос</div>
+      </div>
+    </section>
+
+    <!-- Target orders -->
+    <section class="card">
+      <h2>Ордера целевого кошелька</h2>
+      <div class="table-wrap">
+        <table id="table-target">
+          <thead>
+            <tr>
+              <th>ID ордера</th>
+              <th>Рынок / Token</th>
+              <th>Сторона</th>
+              <th>Цена</th>
+              <th>Размер</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="btn-refresh-target">🔄 Обновить</button>
+    </section>
+
+    <!-- Copied orders -->
+    <section class="card">
+      <h2>Скопированные ордера</h2>
+      <div class="table-wrap">
+        <table id="table-copied">
+          <thead>
+            <tr>
+              <th>Оригинальный ID</th>
+              <th>Скопированный ID</th>
+              <th>Token</th>
+              <th>Сторона</th>
+              <th>Цена</th>
+              <th>Размер</th>
+              <th>Статус</th>
+              <th>Время</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Own orders -->
+    <section class="card">
+      <h2>Мои открытые ордера</h2>
+      <div class="table-wrap">
+        <table id="table-own">
+          <thead>
+            <tr>
+              <th>ID ордера</th>
+              <th>Token</th>
+              <th>Сторона</th>
+              <th>Цена</th>
+              <th>Размер</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="btn-refresh-own">🔄 Обновить</button>
+    </section>
+  </main>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
